@@ -1,0 +1,27 @@
+[UI]
+Material UI
+
+[Layout]
+A) Main Page
+    1. Sidebar - Share.jsx
+        {Functions}
+        1. Params: name, location_name
+        2. User Form: temperature (feels like) - gauge bar
+        3. Submit Button: links to the next page
+    2. Map - Map.jsx
+        {Functions}
+        1. Search Bar: if the search btn is hitted, zooms and shows the specific location
+        2. See All Bar: if the see all btn is hitted, next page should be appeared
+        3. Google Maps API - Maps JavaScript API enabled
+    3. List (Customer) - List.jsx
+        {Functions}
+        1. Params: user_data [pics, temperature, humidity, precipitation, ...]
+        2. Overflow, scrollable
+        3. Sort by (sth)
+
+[Considerations]
+1. Only Material UI or +Alpha
+2. useState, useRef, ...
+
+[Impediments]
+1. process.env.API_KEY not working

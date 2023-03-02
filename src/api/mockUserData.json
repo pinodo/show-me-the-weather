@@ -1,0 +1,29 @@
+{
+    "users": [
+      {
+        "userInfo": [ "9aba6086-a30a-4369-b507-c0d1683c5990", "Tressa Alex", "burnaby", "url_talex" ],
+        "temperature": 5,
+        "precipitation": 2
+      },
+      {
+        "userInfo": [ "9757866a-406b-4b38-97b8-1a5a4decebe1", "Kelan Finnley", "vancouver", "url_kfinnley" ],
+        "temperature": 4,
+        "precipitation": 1
+      },
+      {
+        "userInfo": [ "ccbee947-89ee-4607-842b-6fc3319dc574", "Lincoln Sallie", "metrotown", "url_lsallie" ],
+        "temperature": 5,
+        "precipitation": 3
+      },
+      {
+        "userInfo": [ "99da9991-0552-4cd1-87f9-0b688d5cd9f3", "Anona Isador", "vancouver", "url_aisador" ],
+        "temperature": 5,
+        "precipitation": 1
+      },
+      {
+        "userInfo": [ "62313059-37eb-4103-9e43-878b5300a883", "Brie Janel", "new westminster", "url_bjanel" ],
+        "temperature": 3,
+        "precipitation": 2
+      }
+    ]
+  }
