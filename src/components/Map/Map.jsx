@@ -1,82 +1,99 @@
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useState } from "react";
-import Search from "../Search/Search";
-import "./Map.css"
+import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import { GoogleMap } from "@react-google-maps/api";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { IgrLinearGauge } from "igniteui-react-gauges";
+import { IgrLinearGaugeModule } from "igniteui-react-gauges";
+import Place from "../Place/Place";
+import List from "../List/List";
+import "./Map.css";
 
-const mockLocation = {
-  "vancouver": ["49.240906", "-123.1695677", "12z"],
-  "burnaby": ["49.2200111", "123.0237459", "12z"],
-  "newwestminster": ["49.1969052", "122.9444617", "13z"],
-}
+IgrLinearGaugeModule.register();
 
-function Map(
-  users
-) {
-    const [inputLocation, setInputLocation] = useState("");
-    
-    // const [info, setInfo] = useState([49.2357012, -123.0126994, 11.5])
-    const [lat, setLat] = useState(49.2357012);
-    const [lng, setLng] = useState(-123.0126994);
-    const [zoom, setZoom] = useState(11.5);
+function Map(users) {
+  const [userLocation, setUserLocation] = useState();
+  const mapRef = useRef();
+  const center = useMemo(() => ({ lat: 49.240906, lng: -123.1695677 }), []);
+  const options = useMemo(() => ({
+    // mapId: "d38ddb8950d85ff7", // customized map style, sometimes not rendering the maps
+    disableDefaultUI: true,
+    clickableIcons: false,
+  }));
 
-    const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyDkvLWqkSGl1zGB_TqjKuJnV6q465ZnpuI",
-    });
-    
-    if (!isLoaded) return <div>Loading...</div>;
+  const onLoad = useCallback((map) => (mapRef.current = map), []);
+  const userLocations = useMemo(() => generateLocation(center), [center]);
+  const onGaugeRef = (component) => {
+    if (!component) return;
+  };
 
-    // console.log(users["users"][0]);
-    const userList = users["users"][0];
-    
-    const getInputValue = (value) => {
-      setInputLocation(value.trim().toLowerCase());
-      console.log(inputLocation);
-    };
-
-    // data manipulation
-
-    // getLatFromData(inputLocation);
-
-    console.log(mockLocation["vancouver"][0])
-    
-    const setLocationAndCheck = () => {
-      // const userLat = mockLocation[inputLocation][0];
-      // setLat(mockLocation[inputLocation][0]);
-      // setLng(mockLocation[inputLocation][1]);
-      // setZoom(mockLocation[inputLocation][2]);
-      
-      // getLatFromData(inputLocation);
-
-      console.log(inputLocation)
-      console.log(inputLocation.trim().toLowerCase())
-      return inputLocation.trim().toLowerCase() in mockLocation
-    }
-
-    return (
-      <>
-        <Search
-          getInputValue={getInputValue}
+  return (
+    <div className="container">
+      <div className="search-bar">
+        <Typography>Enter the location</Typography>
+        <Place
+          setUserLocation={(position) => {
+            setUserLocation(position);
+            mapRef.current?.panTo(position);
+          }}
         />
-        {
-          setLocationAndCheck()?
-            <GoogleMap
-              zoom={zoom}
-              center={{lat: lat, lng: lng}}
-              mapContainerClassName="map-container"
-            >
-            </GoogleMap> :
-          //   <GoogleMap
-          //   zoom={zoom}
-          //   center={{lat: lat, lng: lng}}
-          //   mapContainerClassName="map-container-error"
-          // >
-          // </GoogleMap>
-          void(0)
-        }
-      </>
-     );
+        <div className="profile">
+          <Typography>
+            Howdy,
+            <br />
+            NAME
+            <br />
+            Share Your Weather!
+          </Typography>
+          <Box
+            className="profile-location"
+            sx={{ p: 2, border: "1px dashed grey" }}
+          >
+            LOCATION
+          </Box>
+        </div>
+        <div className="profile-gauge">
+          <Typography>Select temperature</Typography>
+          <IgrLinearGauge
+            width="100%"
+            height="40px"
+            minimumValue={1}
+            maximumValue={5}
+            interval={1}
+            value={3}
+            isNeedleDraggingEnabled={true}
+          />
+          <Typography>Select temperature</Typography>
+          <IgrLinearGauge
+            width="100%"
+            height="40px"
+            minimumValue={1}
+            maximumValue={5}
+            interval={1}
+            value={3}
+            isNeedleDraggingEnabled={true}
+          />
+        </div>
+        <div className="profile-submit-btn">
+          <button>Submit</button>
+        </div>
+      </div>
+
+      <div className="map">
+        <GoogleMap
+          zoom={12}
+          center={center}
+          mapContainerClassName="map-container"
+          options={options}
+          onLoad={onLoad}
+        ></GoogleMap>
+        <List className="list-container" />
+      </div>
+    </div>
+  );
 }
+
+const generateLocation = (position) => {
+  const userLocations = [];
+};
 
 export default Map;
-
-// 49.2357012,-123.0126994,11.9z
