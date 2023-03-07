@@ -1,16 +1,19 @@
-import { Typography } from "@mui/material";
+import { Button, Slider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { GoogleMap } from "@react-google-maps/api";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { IgrLinearGauge } from "igniteui-react-gauges";
-import { IgrLinearGaugeModule } from "igniteui-react-gauges";
+// import { IgrLinearGauge } from "igniteui-react-gauges";
+// import { IgrLinearGaugeModule } from "igniteui-react-gauges";
 import Place from "../Place/Place";
 import List from "../List/List";
 import "./Map.css";
 
-IgrLinearGaugeModule.register();
+// IgrLinearGaugeModule.register();
 
 function Map(users) {
+  const [temperature, setTemperature] = useState();
+  const [precipitation, setPrecipitation] = useState();
+  const [userList, setUserList] = useState([]);
   const [userLocation, setUserLocation] = useState();
   const mapRef = useRef();
   const center = useMemo(() => ({ lat: 49.240906, lng: -123.1695677 }), []);
@@ -22,9 +25,34 @@ function Map(users) {
 
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const userLocations = useMemo(() => generateLocation(center), [center]);
-  const onGaugeRef = (component) => {
-    if (!component) return;
+  const marks = [
+    {
+      value: 1,
+      label: "1",
+    },
+    {
+      value: 2,
+      label: "2",
+    },
+    {
+      value: 3,
+      label: "3",
+    },
+    {
+      value: 4,
+      label: "4",
+    },
+    {
+      value: 5,
+      label: "5",
+    },
+  ];
+
+  const valuetext = (value) => {
+    return `${value}`;
   };
+
+  // console.log(linearValue);
 
   return (
     <div className="container">
@@ -51,30 +79,36 @@ function Map(users) {
             LOCATION
           </Box>
         </div>
-        <div className="profile-gauge">
-          <Typography>Select temperature</Typography>
-          <IgrLinearGauge
-            width="100%"
-            height="40px"
-            minimumValue={1}
-            maximumValue={5}
-            interval={1}
-            value={3}
-            isNeedleDraggingEnabled={true}
+
+        <Box className="profile-gauge">
+          <Typography>Temperature</Typography>
+          <Slider
+            aria-label="Custom marks"
+            min={1}
+            max={5}
+            defaultValue={3}
+            step={1}
+            valueLabelDisplay="auto"
+            marks={marks}
+            getAriaValueText={valuetext}
           />
-          <Typography>Select temperature</Typography>
-          <IgrLinearGauge
-            width="100%"
-            height="40px"
-            minimumValue={1}
-            maximumValue={5}
-            interval={1}
-            value={3}
-            isNeedleDraggingEnabled={true}
+          <Typography>Precipitation</Typography>
+          <Slider
+            aria-label="Custom marks"
+            min={1}
+            max={5}
+            defaultValue={3}
+            step={1}
+            valueLabelDisplay="auto"
+            marks={marks}
+            getAriaValueText={valuetext}
           />
-        </div>
+        </Box>
+
         <div className="profile-submit-btn">
-          <button>Submit</button>
+          <Button variant="contained" onSubmit={() => {}}>
+            Submit
+          </Button>
         </div>
       </div>
 
@@ -97,3 +131,28 @@ const generateLocation = (position) => {
 };
 
 export default Map;
+
+{
+  /* <div className="profile-gauge">
+          <Typography>Select temperature</Typography>
+          <IgrLinearGauge
+            width="100%"
+            height="40px"
+            minimumValue={1}
+            maximumValue={5}
+            interval={1}
+            value={3}
+            isNeedleDraggingEnabled={true}
+          />
+          <Typography>Select temperature</Typography>
+          <IgrLinearGauge
+            width="100%"
+            height="40px"
+            minimumValue={1}
+            maximumValue={5}
+            interval={1}
+            value={3}
+            isNeedleDraggingEnabled={true}
+          />
+        </div> */
+}

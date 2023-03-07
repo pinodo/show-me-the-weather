@@ -31,6 +31,10 @@ function Place({ setUserLocation }) {
     setUserLocation({ lat, lng });
   };
 
+  const onReset = () => {
+    setValue("");
+  };
+
   return (
     <Combobox onSelect={handleSelect}>
       <ComboboxInput
@@ -41,7 +45,7 @@ function Place({ setUserLocation }) {
         placeholder="Search location here"
       />
       <ComboboxPopover>
-        <ComboboxList>
+        <ComboboxList onClick={onReset}>
           {status === "OK" &&
             data.map(({ place_id, description }) => (
               <ComboboxOption key={place_id} value={description} />

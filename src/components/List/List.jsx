@@ -1,4 +1,4 @@
-import UserInfo from "../UserInfo/UserInfo";
+// import UserInfo from "../UserInfo/UserInfo";
 import "./List.css";
 
 function List({ name, users }) {
