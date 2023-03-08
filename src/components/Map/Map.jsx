@@ -1,30 +1,37 @@
 import { Button, Slider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { useCallback, useMemo, useRef, useState } from "react";
-// import { IgrLinearGauge } from "igniteui-react-gauges";
-// import { IgrLinearGaugeModule } from "igniteui-react-gauges";
 import Place from "../Place/Place";
 import List from "../List/List";
 import "./Map.css";
 
-// IgrLinearGaugeModule.register();
+const libraries = ["places"];
 
-function Map(users) {
+function Map() {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries: libraries,
+  });
+
   const [temperature, setTemperature] = useState();
   const [precipitation, setPrecipitation] = useState();
-  const [userList, setUserList] = useState([]);
+  // const [userList, setUserList] = useState([]);
   const [userLocation, setUserLocation] = useState();
   const mapRef = useRef();
   const center = useMemo(() => ({ lat: 49.240906, lng: -123.1695677 }), []);
-  const options = useMemo(() => ({
-    // mapId: "d38ddb8950d85ff7", // customized map style, sometimes not rendering the maps
-    disableDefaultUI: true,
-    clickableIcons: false,
-  }));
+  const options = useMemo(
+    () => ({
+      // mapId: "d38ddb8950d85ff7", // customized map style, sometimes not rendering the maps
+      disableDefaultUI: true,
+      clickableIcons: false,
+    }),
+    []
+  );
 
+  // console.log(userLocation);
   const onLoad = useCallback((map) => (mapRef.current = map), []);
-  const userLocations = useMemo(() => generateLocation(center), [center]);
+  // const userLocations = useMemo(() => generateLocation(center), [center]);
   const marks = [
     {
       value: 1,
@@ -52,7 +59,17 @@ function Map(users) {
     return `${value}`;
   };
 
-  // console.log(linearValue);
+  const handleTemperatureSliderChange = (event, newValue) => {
+    setTemperature(newValue);
+    console.log("Temperature", newValue);
+  };
+
+  const handlePrecipitationSliderChange = (event, newValue) => {
+    setPrecipitation(newValue);
+    console.log("Precipitation", newValue);
+  };
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div className="container">
@@ -80,36 +97,44 @@ function Map(users) {
           </Box>
         </div>
 
-        <Box className="profile-gauge">
-          <Typography>Temperature</Typography>
-          <Slider
-            aria-label="Custom marks"
-            min={1}
-            max={5}
-            defaultValue={3}
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-            getAriaValueText={valuetext}
-          />
-          <Typography>Precipitation</Typography>
-          <Slider
-            aria-label="Custom marks"
-            min={1}
-            max={5}
-            defaultValue={3}
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-            getAriaValueText={valuetext}
-          />
-        </Box>
+        <div className="profile-submit-logout">
+          <Box className="profile-gauge">
+            <Typography>Temperature</Typography>
+            <Slider
+              aria-label="Custom marks"
+              min={1}
+              max={5}
+              defaultValue={3}
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+              getAriaValueText={valuetext}
+              onChange={handleTemperatureSliderChange}
+            />
+            <Typography>Precipitation</Typography>
+            <Slider
+              aria-label="Custom marks"
+              min={1}
+              max={5}
+              defaultValue={3}
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+              getAriaValueText={valuetext}
+              onChange={handlePrecipitationSliderChange}
+            />
+          </Box>
 
-        <div className="profile-submit-btn">
-          <Button variant="contained" onSubmit={() => {}}>
+          <Button
+            variant="contained"
+            className="profile-submit-btn"
+            onSubmit={() => {}}
+          >
             Submit
           </Button>
         </div>
+
+        <div className="profile-submit-login"></div>
       </div>
 
       <div className="map">
@@ -126,14 +151,13 @@ function Map(users) {
   );
 }
 
-const generateLocation = (position) => {
-  const userLocations = [];
-};
+// const generateLocation = (position) => {
+//   // const userLocations = [];
+// };
 
 export default Map;
 
-{
-  /* <div className="profile-gauge">
+/* <div className="profile-gauge">
           <Typography>Select temperature</Typography>
           <IgrLinearGauge
             width="100%"
@@ -155,4 +179,3 @@ export default Map;
             isNeedleDraggingEnabled={true}
           />
         </div> */
-}

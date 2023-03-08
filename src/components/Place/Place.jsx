@@ -29,6 +29,7 @@ function Place({ setUserLocation }) {
     const result = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(result[0]);
     setUserLocation({ lat, lng });
+    console.log(result[0]);
   };
 
   const onReset = () => {

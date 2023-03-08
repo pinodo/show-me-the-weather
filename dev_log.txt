@@ -23,5 +23,8 @@ A) Main Page
 1. Only Material UI or +Alpha
 2. useState, useRef, ...
 
-[Impediments]
-1. process.env.API_KEY not working
+[7 Mar]
+Map.jsx - onSubmit => change the form (lower sidebar section) to weather info, generate user location markers
+Map.jsx - divide into search, profile, and submitForm
+Place.jsx - change to Search.jsx
+Search.jsx - get user data from firebase and render according to the location

@@ -24,9 +24,13 @@
   width: 100%;
 }
 
+.profile-submit-logout {
+  text-align: center;
+}
+
 .profile-submit-btn {
   margin-top: 2rem;
-  text-align: center;
+  width: 100%;
 }
 
 .map-container {
