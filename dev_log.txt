@@ -1,27 +1,23 @@
 [UI]
 Material UI
+@reach/combobox
 
 [Layout]
 A) Main Page
-    1. Sidebar - Share.jsx
+    1. Sidebar - Search.jsx / Profile.jsx / UserForm.jsx
         {Functions}
-        1. Params: name, location_name
-        2. User Form: temperature (feels like) - gauge bar
-        3. Submit Button: links to the next page
+        1. User Form: temperature (feels like) - gauge bar
+        2. Submit Button: links to the next page, store information(temperature, precipitation, user location, ...)
     2. Map - Map.jsx
         {Functions}
-        1. Search Bar: if the search btn is hitted, zooms and shows the specific location
-        2. See All Bar: if the see all btn is hitted, next page should be appeared
-        3. Google Maps API - Maps JavaScript API enabled
+        1. See All Bar btn: if the see all btn is hitted, next page should be appeared
+        2. Google Maps API - Maps JavaScript API, Places API, Geocoding API enabled
     3. List (Customer) - List.jsx
         {Functions}
-        1. Params: user_data [pics, temperature, humidity, precipitation, ...]
-        2. Overflow, scrollable
-        3. Sort by (sth)
+        1. Overflow, scrollable
+        2. Sort by Search bar input
 
-[Considerations]
-1. Only Material UI or +Alpha
-2. useState, useRef, ...
+B) Result Page
 
 [7 Mar]
 Map.jsx - onSubmit => change the form (lower sidebar section) to weather info, generate user location markers
