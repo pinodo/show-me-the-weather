@@ -1,30 +1,49 @@
+// USECONTEXT
+import {
+  useEffect,
+  useState,
+  // createContext,
+} from "react";
 import Map from "./components/Map/Map";
-// import List from "./components/List/List";
-// import { Box } from "@mui/system";
-// import { useEffect, useMemo, useRef } from "react";
-// import { useLoadScript } from "@react-google-maps/api";
 import "./App.css";
+import { db } from "./config/firebase";
+import { getDocs, collection } from "firebase/firestore";
 
-// const libraries = ["places"];
+// USECONTEXT
+// export const UserContext = createContext();
 
 function App() {
-  // const { isLoaded } = useLoadScript({
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  //   // [libraries]: libraries,
-  // });
+  const [userList, setUserList] = useState([]);
 
-  // console.log(1);
+  const usersCollectionRef = collection(db, "users");
 
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(function (position) {
-  //     console.log("Latitude is :", position.coords.latitude);
-  //     console.log("Longitude is :", position.coords.longitude);
-  //   });
-  // });
+  useEffect(() => {
+    const getUserList = async () => {
+      try {
+        const data = await getDocs(usersCollectionRef);
+        const filteredData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        console.log("filteredData", filteredData);
+        // console.log("data.docs", data.docs);
+        // console.log("data", data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  // if (!isLoaded) return <div>Loading...</div>;
+    getUserList();
+  }, []);
+  // USECONTEXT
+  // const [user, setUser] = useState("Alvin");
 
-  return <Map />;
+  return (
+    // USECONTEXT
+    // <UserContext.Provider value={user}>
+    <Map />
+    // </UserContext.Provider>
+  );
 }
 
 export default App;

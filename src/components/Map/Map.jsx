@@ -1,10 +1,19 @@
 import { Button, Slider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  // USECONTEXT
+  // useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Place from "../Place/Place";
 import List from "../List/List";
 import "./Map.css";
+// USECONTEXT
+// import { UserContext } from "../../App";
 
 const libraries = ["places"];
 
@@ -13,9 +22,11 @@ function Map() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: libraries,
   });
-
+  // USECONTEXT
+  // const user = useContext(UserContext);
   const [temperature, setTemperature] = useState();
   const [precipitation, setPrecipitation] = useState();
+  // USECONTEXT
   // const [userList, setUserList] = useState([]);
   const [userLocation, setUserLocation] = useState();
   const mapRef = useRef();
@@ -29,7 +40,6 @@ function Map() {
     []
   );
 
-  // console.log(userLocation);
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   // const userLocations = useMemo(() => generateLocation(center), [center]);
   const marks = [
@@ -70,7 +80,8 @@ function Map() {
   };
 
   if (!isLoaded) return <div>Loading...</div>;
-
+  // USECONTEXT
+  // console.log(user);
   return (
     <div className="container">
       <div className="search-bar">
@@ -156,26 +167,3 @@ function Map() {
 // };
 
 export default Map;
-
-/* <div className="profile-gauge">
-          <Typography>Select temperature</Typography>
-          <IgrLinearGauge
-            width="100%"
-            height="40px"
-            minimumValue={1}
-            maximumValue={5}
-            interval={1}
-            value={3}
-            isNeedleDraggingEnabled={true}
-          />
-          <Typography>Select temperature</Typography>
-          <IgrLinearGauge
-            width="100%"
-            height="40px"
-            minimumValue={1}
-            maximumValue={5}
-            interval={1}
-            value={3}
-            isNeedleDraggingEnabled={true}
-          />
-        </div> */
