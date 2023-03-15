@@ -1,20 +1,19 @@
-// import UserInfo from "../UserInfo/UserInfo";
+import { useContext } from "react";
+import { UserContext } from "../../components/Map/Map";
+// import { useState } from "react";
 import "./List.css";
 
-function List({ name, users }) {
+function List() {
+  // const [filteredUserList, setFilteredUserList] = useState([]);
+  const userList = useContext(UserContext);
   return (
     <div className="list-body">
-      {/* maps the elements of a list
-                params: element, index
-            */}
-      {/* {userList?.map((user, i) => (
-                <div key={i}>
-                    <UserInfo 
-                        user={user}
-                    />
-                </div>
-            ))} */}
-      list
+      {userList.map((user) => (
+        <div key={user.id}>
+          {user.photoURL === "" ? "Default Photo URL" : user.photoURL} |{" "}
+          {user.temperature} | {user.precipitation}
+        </div>
+      ))}
     </div>
   );
 }

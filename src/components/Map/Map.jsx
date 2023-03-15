@@ -1,34 +1,49 @@
-import { Button, Slider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import {
   useCallback,
-  // USECONTEXT
-  // useContext,
   useMemo,
   useRef,
   useState,
+  useEffect,
+  createContext,
 } from "react";
-import Place from "../Place/Place";
+import { db } from "../../config/firebase";
+import Search from "../Search/Search";
 import List from "../List/List";
 import "./Map.css";
-// USECONTEXT
-// import { UserContext } from "../../App";
+import { getDocs, collection } from "firebase/firestore";
+import Submit from "../Submit/Submit";
+
+export const UserContext = createContext();
 
 const libraries = ["places"];
 
 function Map() {
+  const [userLocation, setUserLocation] = useState();
+  const [userList, setUserList] = useState([]);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: libraries,
   });
-  // USECONTEXT
-  // const user = useContext(UserContext);
-  const [temperature, setTemperature] = useState();
-  const [precipitation, setPrecipitation] = useState();
-  // USECONTEXT
-  // const [userList, setUserList] = useState([]);
-  const [userLocation, setUserLocation] = useState();
+
+  const usersCollectionRef = collection(db, "users");
+
+  //get data from firestore
+  const getUserList = async () => {
+    try {
+      const data = await getDocs(usersCollectionRef);
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setUserList(filteredData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mapRef = useRef();
   const center = useMemo(() => ({ lat: 49.240906, lng: -123.1695677 }), []);
   const options = useMemo(
@@ -42,123 +57,100 @@ function Map() {
 
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   // const userLocations = useMemo(() => generateLocation(center), [center]);
-  const marks = [
-    {
-      value: 1,
-      label: "1",
-    },
-    {
-      value: 2,
-      label: "2",
-    },
-    {
-      value: 3,
-      label: "3",
-    },
-    {
-      value: 4,
-      label: "4",
-    },
-    {
-      value: 5,
-      label: "5",
-    },
-  ];
 
-  const valuetext = (value) => {
-    return `${value}`;
-  };
+  useEffect(() => {
+    getUserList();
+  }, []);
 
-  const handleTemperatureSliderChange = (event, newValue) => {
-    setTemperature(newValue);
-    console.log("Temperature", newValue);
-  };
+  // SUBMIT
+  // const marks = [
+  //   {
+  //     value: 1,
+  //     label: "1",
+  //   },
+  //   {
+  //     value: 2,
+  //     label: "2",
+  //   },
+  //   {
+  //     value: 3,
+  //     label: "3",
+  //   },
+  //   {
+  //     value: 4,
+  //     label: "4",
+  //   },
+  //   {
+  //     value: 5,
+  //     label: "5",
+  //   },
+  // ];
 
-  const handlePrecipitationSliderChange = (event, newValue) => {
-    setPrecipitation(newValue);
-    console.log("Precipitation", newValue);
-  };
+  // const valuetext = (value) => {
+  //   return `${value}`;
+  // };
+
+  // const handleTemperatureSliderChange = (event, newValue) => {
+  //   setTemperature(newValue);
+  //   console.log("Temperature", newValue);
+  // };
+
+  // const handlePrecipitationSliderChange = (event, newValue) => {
+  //   setPrecipitation(newValue);
+  //   console.log("Precipitation", newValue);
+  // };
+
+  // const onSubmitUser = async () => {
+  //   await addDoc();
+  // };
 
   if (!isLoaded) return <div>Loading...</div>;
-  // USECONTEXT
-  // console.log(user);
+
   return (
-    <div className="container">
-      <div className="search-bar">
-        <Typography>Enter the location</Typography>
-        <Place
-          setUserLocation={(position) => {
-            setUserLocation(position);
-            mapRef.current?.panTo(position);
-          }}
-        />
-        <div className="profile">
-          <Typography>
-            Howdy,
-            <br />
-            NAME
-            <br />
-            Share Your Weather!
-          </Typography>
-          <Box
-            className="profile-location"
-            sx={{ p: 2, border: "1px dashed grey" }}
-          >
-            LOCATION
-          </Box>
+    <UserContext.Provider value={userList}>
+      <div className="container">
+        <div className="sidebar">
+          {/* SEARCH */}
+          <Search
+            setUserLocation={(position) => {
+              setUserLocation(position);
+              mapRef.current?.panTo(position);
+            }}
+          />
+
+          {/* PROFILE */}
+          <div className="profile">
+            <Typography>
+              Howdy,
+              <br />
+              NAME
+              <br />
+              Share Your Weather!
+            </Typography>
+            <Box
+              className="profile-location"
+              sx={{ p: 2, border: "1px dashed grey" }}
+            >
+              LOCATION
+            </Box>
+          </div>
+
+          {/* SUBMIT */}
+          <Submit />
         </div>
 
-        <div className="profile-submit-logout">
-          <Box className="profile-gauge">
-            <Typography>Temperature</Typography>
-            <Slider
-              aria-label="Custom marks"
-              min={1}
-              max={5}
-              defaultValue={3}
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              getAriaValueText={valuetext}
-              onChange={handleTemperatureSliderChange}
-            />
-            <Typography>Precipitation</Typography>
-            <Slider
-              aria-label="Custom marks"
-              min={1}
-              max={5}
-              defaultValue={3}
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              getAriaValueText={valuetext}
-              onChange={handlePrecipitationSliderChange}
-            />
-          </Box>
-
-          <Button
-            variant="contained"
-            className="profile-submit-btn"
-            onSubmit={() => {}}
-          >
-            Submit
-          </Button>
+        <div className="map">
+          <GoogleMap
+            zoom={12}
+            center={center}
+            mapContainerClassName="map-container"
+            options={options}
+            onLoad={onLoad}
+          ></GoogleMap>
+          <List className="list-container" />
         </div>
-
-        <div className="profile-submit-login"></div>
       </div>
-
-      <div className="map">
-        <GoogleMap
-          zoom={12}
-          center={center}
-          mapContainerClassName="map-container"
-          options={options}
-          onLoad={onLoad}
-        ></GoogleMap>
-        <List className="list-container" />
-      </div>
-    </div>
+    </UserContext.Provider>
   );
 }
 

@@ -1,48 +1,40 @@
 // USECONTEXT
-import {
-  useEffect,
-  useState,
-  // createContext,
-} from "react";
+// import { useEffect, useState, createContext } from "react";
 import Map from "./components/Map/Map";
 import "./App.css";
-import { db } from "./config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+// import { db } from "./config/firebase";
+// import { getDocs, collection } from "firebase/firestore";
 
 // USECONTEXT
 // export const UserContext = createContext();
 
 function App() {
-  const [userList, setUserList] = useState([]);
+  // const [userList, setUserList] = useState([]);
 
-  const usersCollectionRef = collection(db, "users");
+  // const usersCollectionRef = collection(db, "users");
 
-  useEffect(() => {
-    const getUserList = async () => {
-      try {
-        const data = await getDocs(usersCollectionRef);
-        const filteredData = data.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        console.log("filteredData", filteredData);
-        // console.log("data.docs", data.docs);
-        // console.log("data", data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //get data from firestore
+  // const getUserList = async () => {
+  //   try {
+  //     const data = await getDocs(usersCollectionRef);
+  //     const filteredData = data.docs.map((doc) => ({
+  //       ...doc.data(),
+  //       id: doc.id,
+  //     }));
+  //     setUserList(filteredData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-    getUserList();
-  }, []);
-  // USECONTEXT
-  // const [user, setUser] = useState("Alvin");
+  // useEffect(() => {
+  //   getUserList();
+  // }, []);
 
   return (
-    // USECONTEXT
-    // <UserContext.Provider value={user}>
+    // <UserContext.Provider value={userList}>
     <Map />
-    // </UserContext.Provider>
+    // {/* </UserContext.Provider> */}
   );
 }
 
