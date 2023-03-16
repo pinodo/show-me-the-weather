@@ -1,8 +1,0 @@
-.list-body {
-  background-color: #fef6eb;
-  height: 20%;
-  display: flex;
-  gap: 10vh;
-  overflow-y: auto;
-  padding: 0.5rem;
-}

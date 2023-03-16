@@ -1,5 +1,3 @@
-import { Typography } from "@mui/material";
-import Box from "@mui/material/Box";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import {
   useCallback,
@@ -11,18 +9,22 @@ import {
 } from "react";
 import { db } from "../../config/firebase";
 import Search from "../Search/Search";
-import List from "../List/List";
+// import UserList from "../UserList/UserList";
 import "./Map.css";
 import { getDocs, collection } from "firebase/firestore";
 import Submit from "../Submit/Submit";
+import Profile from "../Profile/Profile";
+import UserList from "../UserList/UserList";
 
 export const UserContext = createContext();
 
 const libraries = ["places"];
 
 function Map() {
+  // console.log(db);
   const [userLocation, setUserLocation] = useState();
   const [userList, setUserList] = useState([]);
+  const [position, setPosition] = useState();
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: libraries,
@@ -114,29 +116,17 @@ function Map() {
           <Search
             setUserLocation={(position) => {
               setUserLocation(position);
+              setPosition(position);
+              console.log(position);
               mapRef.current?.panTo(position);
             }}
           />
 
           {/* PROFILE */}
-          <div className="profile">
-            <Typography>
-              Howdy,
-              <br />
-              NAME
-              <br />
-              Share Your Weather!
-            </Typography>
-            <Box
-              className="profile-location"
-              sx={{ p: 2, border: "1px dashed grey" }}
-            >
-              LOCATION
-            </Box>
-          </div>
+          <Profile />
 
           {/* SUBMIT */}
-          <Submit />
+          <Submit position={position} />
         </div>
 
         <div className="map">
@@ -147,7 +137,7 @@ function Map() {
             options={options}
             onLoad={onLoad}
           ></GoogleMap>
-          <List className="list-container" />
+          <UserList className="list-container" />
         </div>
       </div>
     </UserContext.Provider>

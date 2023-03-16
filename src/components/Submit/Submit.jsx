@@ -1,10 +1,15 @@
 import Box from "@mui/material/Box";
 import { Button, Slider, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
-function Submit() {
-  const [temperature, setTemperature] = useState(-1);
-  const [precipitation, setPrecipitation] = useState(-1);
+function Submit(position) {
+  //   console.log(position.position);
+  const [temperature, setTemperature] = useState();
+  const [precipitation, setPrecipitation] = useState();
+  const usersCollectionRef = collection(db, "users");
+  // google auth -> get location, name, photoURL, contributeNums
 
   const marks = [
     {
@@ -43,8 +48,25 @@ function Submit() {
     console.log("Precipitation", newValue);
   };
 
-  const onSubmitUser = async () => {
-    //   await addDoc();
+  const onSubmitUser = async (e) => {
+    try {
+      if (!temperature | !precipitation) {
+        alert("Select the temperature and precipitation");
+        return;
+      } else {
+        e.preventDefault();
+        await addDoc(usersCollectionRef, {
+          // contributeNums: ,
+          // location: ,
+          // name: ,
+          // photoURL: ,
+          precipitation: precipitation,
+          temperature: temperature,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -79,7 +101,7 @@ function Submit() {
       <Button
         variant="contained"
         className="profile-submit-btn"
-        onSubmit={onSubmitUser}
+        onClick={onSubmitUser}
       >
         Submit
       </Button>

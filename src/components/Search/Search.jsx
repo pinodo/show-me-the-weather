@@ -14,7 +14,7 @@ import "@reach/combobox/styles.css";
 import "./Search.css";
 import { Typography } from "@mui/material";
 
-function Place({ setUserLocation }) {
+function Search({ setUserLocation }) {
   const {
     ready,
     value,
@@ -30,10 +30,10 @@ function Place({ setUserLocation }) {
     const result = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(result[0]);
     setUserLocation({ lat, lng });
-    console.log(
-      "Search input value",
-      result[0].address_components[0].long_name
-    );
+    // console.log(
+    //   "Search input value",
+    //   result[0].address_components[0].long_name
+    // );
   };
 
   const onReset = () => {
@@ -64,4 +64,4 @@ function Place({ setUserLocation }) {
   );
 }
 
-export default Place;
+export default Search;
